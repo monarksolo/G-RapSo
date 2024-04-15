@@ -41,3 +41,6 @@ Route::get('/searchusers/{name}', [UserController::class, 'search']);
 Route::get('/proj', function(){
     return Projet::all();
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
