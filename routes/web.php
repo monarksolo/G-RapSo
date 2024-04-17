@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Projet;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuiviController;
 use App\Http\Controllers\ProjetController;
@@ -44,3 +46,4 @@ Route::get('/proj', function(){
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth');
