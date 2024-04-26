@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\Role;
+use App\Models\Suivi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,7 +28,26 @@ Route::post('/login', function (Request $request) {
         ]);
     }
 
-    // Si l'authentification réussit, vous pouvez générer un token JWT ou un autre mécanisme d'authentification
+    $role = Role::find($user->role_id);
+    return response()->json([
+        'success' => true,
+        'user' => [
+            'email' => $user->email,
+            'name' => $user->name,
+            'role' => $role->privilege,
+        ]
+    ]);
+});
 
-    return response()->json(['message' => 'Login successful'], 200);
+Route::post('/addsuivis', function (Request $request) {
+    $suivi = new Suivi();
+    $suivi->calendrier_soutenance_venir = $request->input('calendrier_soutenance_venir');
+    $suivi->historique_soutenance_passe = $request->input('historique_soutenance_passe');
+    $suivi->evaluation_rapport = $request->input('evaluation_rapport');
+    $suivi->commentaire = $request->input('commentaire');
+    $suivi->save();
+
+    return response()->json([
+        'success' => true,
+    ]);
 });
